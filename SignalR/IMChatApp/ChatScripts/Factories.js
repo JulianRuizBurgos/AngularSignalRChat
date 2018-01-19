@@ -27,6 +27,11 @@
                 $hub.server.userTyping(connectionid, msg);
             });
         },
+        NotifyNewMessageReceived: function(toUserId) {
+            connection.done(function() {
+                $hub.server.notifyNewMessageReceived(toUserId);
+            });
+        },
         ////////////////////// CLIENT METHODS////////////////////            
         joinroom: function (callback) {
             $hub.client.joinroom = callback;
@@ -54,8 +59,10 @@
         },
         IsTyping: function (callback) {
             $hub.client.isTyping = callback;
+        },
+        ReceivingNewMessageNotification: function(callback) {
+            $hub.client.receiveNewMessageNotification = callback;
         }
-
         
     }
     return signalR;

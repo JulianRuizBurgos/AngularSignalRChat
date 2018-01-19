@@ -56,6 +56,17 @@ namespace IMChatApp.Hubs
             Clients.Others.statusChanged(userId,status);
             
         }
+
+        public void NotifyNewMessageReceived(string toUserId)
+        {
+            var fromUserId = Context.ConnectionId;
+            var toUser = loggedInUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            var fromUser = loggedInUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+            if (toUser != null && fromUser != null)
+            {
+                Clients.Client(toUserId).ReceiveNewMessageNotification(fromUserId, fromUser.name);
+            }
+        }
         public void UserTyping(string connectionId, string msg)
         {
             var id = Context.ConnectionId;

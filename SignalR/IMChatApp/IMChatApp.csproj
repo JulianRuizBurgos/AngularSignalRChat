@@ -176,6 +176,7 @@
     <Content Include="ChatScripts\angular.min.js" />
     <Content Include="ChatScripts\App.js" />
     <Content Include="ChatScripts\Controlers.js" />
+    <Content Include="ChatScripts\Controlers - backup.js" />
     <Content Include="ChatScripts\Factories.js" />
     <Content Include="Content\angular-flash.css" />
     <Content Include="Content\bootstrap.icons.css" />
@@ -231,6 +232,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Chat-bb.cshtml" />
     <Content Include="Views\Home\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>

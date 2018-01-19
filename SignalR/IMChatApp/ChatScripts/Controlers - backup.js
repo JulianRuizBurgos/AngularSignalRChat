@@ -8,8 +8,7 @@
     $scope.activeRoom = '';
     $scope.chatHistory = [];
     $scope.Users = []
-    $scope.RoomsLoggedId = [];
-    $scope.ShowNewMessageFlag = false;
+    $scope.RoomsLoggedId = [];     
     $scope.typemsgdisable = true;  
     signalR.UserEntered(function (room, user,cid) {
          if ($scope.activeRoom == room&&user!='') {          
@@ -149,7 +148,8 @@
            if ($scope.ShowPrivateWindow == false) {
                 $scope.ShowPrivateWindow = true;
             }
-
+           // var msgBdy = { room: r, msgx: { message: msg.message, sender: msg.sender, css: msg.css } };
+            //$scope.chatHistory.push(msgBdy);
             $scope.PrivateMessages.push({ to: toname, from: fromname, message: msg });
 
             if ($scope.$parent.UserName != fromname) // otheruser's pm
@@ -168,15 +168,7 @@
             $scope.$evalAsync();
            // $scope.AddMessageToRoom(msgBdy);
         });
-
-        $scope.NotifyNewMessageReceived(function() {
-            signalR.NotifyNewMessageReceived(toUserId);
-        });
-
-        signalR.ReceivingNewMessageNotification(function(fromuserid, fromUserName) {
-
-        });
-    });
+});
 
 //////////////////////////////////////////////
 
