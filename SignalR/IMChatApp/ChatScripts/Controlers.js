@@ -11,7 +11,7 @@
     $scope.RoomsLoggedId = [];
     $scope.ShowNewMessageFlag = false;
     $scope.typemsgdisable = true;
-        $scope.ReceivedMessageFrom = '';
+        $scope.ReceivedMessageFrom = [];
     signalR.UserEntered(function (room, user,cid) {
          if ($scope.activeRoom == room&&user!='') {          
             var result = $.grep($scope.users, function (e) { return e.name == user; })
@@ -40,11 +40,12 @@
     $scope.UsersCount = 0;
     $scope.bubblesCount = [];
     $scope.maxBubbles = 10;
+        
             
         $scope.ClosePrivateWindow = function ()
         {
             $scope.ShowPrivateWindow = false;
-        }
+    }
    
         $scope.UserInPrivateChat = null;
         $scope.ShowPrivateWindow = false;
@@ -118,12 +119,24 @@
         }
         $scope.PrivateMessage = function (index) {
             //debugger;
-            $scope.ReceiveMessageFrom = '';
             var user = $scope.OnlineUsers[index];
             $scope.ShowPrivateWindow = true;
             $scope.UserInPrivateChat = user;
+            $scope.ReceivedMessageFrom = $.grep($scope.ReceivedMessageFrom,
+                function(value) {
+                    return value !== user.name;
+                });
             console.log($scope.OnlineUsers);    
             $scope.$apply();
+        };
+
+        $scope.PendingMessageFromUser = function (index) {
+            var user = $scope.OnlineUsers[index];
+            if ($.inArray(user.name, $scope.ReceivedMessageFrom) !== -1) {
+                return true;
+            } else {
+                return false;
+            }
         };
         $scope.usertyping = '';
         signalR.IsTyping(function (connectionid, msg) {            
@@ -172,13 +185,11 @@
            // $scope.AddMessageToRoom(msgBdy);
         });
 
-        //$scope.NotifyNewMessageReceived = function() {
-        //    signalR.NotifyNewMessageReceived($scope.UserInPrivateChat.ConnectionId);
-        //};
-        
         signalR.ReceivingNewMessageNotification(function(fromuserid, fromUserName) {
             //En la lista de usuarios conectados hemos de habilitar que se muestre el flag de nuevo mensaje para el usuario que nos ha enviado el mensaje.
-            $scope.ReceivedMessageFrom = fromUserName;
+            if ($.inArray(fromUserName, $scope.ReceivedMessageFrom) === -1) {
+                $scope.ReceivedMessageFrom.push(fromUserName);
+            }
             $scope.$evalAsync();
         });
     });

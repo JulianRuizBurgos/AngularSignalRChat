@@ -5,44 +5,67 @@
 
 <style>
     #divChatWindowsWrapper {
+        position: absolute;
+        top: 10%;
+        left: 0%;
         width: 100%;
-        height: 600px;
-        border: 1px solid Green;
-        padding: 3px;
+        height: 100%;
+        border: 1px solid Black;
+        box-sizing: border-box;
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        align-content: flex-start;
     }
 
     #divConnectedUsersSection {
-        width: 300px;
-        height: 580px;
+        margin: 5px;
+        max-width: 300px;
+        min-width: 200px;
+        min-width: 20%;
+        min-height: 20%;
         background-color: white;
-        margin-right: 5px;
-        /*overflow-y so when lots of users are connected, a scrollbar appers*/
-        overflow-y: auto;
-        float: left;
+        display: flex;
+        overflow: auto;
+        flex-direction: column;
     }
 
     #divChatScreensSection {
-        height: 600px;
-        padding: 0;
-        overflow-y: auto;
+        min-width: 60%;
+        margin: 5px;
+        display: flex;
+        overflow: scroll;
+        flex-direction: column;
     }
 
+    .divOngoingConversationSection {
+
+    }
+    
     .cssOneUserRecord {
-        height: 47px;
+        /*height: 47px;
         width: 98%;
-        position: relative; /* Very important, for appending child <div>s with absolute positioning later */
-        border-bottom: 1px solid white;
+        position: relative; 
+        border-bottom: 1px solid white;*/
+        max-width: inherit;
+        min-width: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        display: flex;
+        overflow: auto;
+        flex-direction: column;
+    }
+    .numberUsersOnlineStyle {
+        white-space: nowrap;
+        overflow: hidden;
+        display: flex;
+        overflow: auto;
     }
 
-    .cssOnlineUserSelectedRecord {
-        /*  If this Company record has been selected, we'll display a Red vertical bar next to it */
-        border-left: 2px solid Red;
-        background-color: white;
-    }
 </style>
 
 <h2>Chat</h2>
-<div id="divChatWindowsWrapper" ng-app="ChatApp" ng-controller="chatController" style="position:relative;">
+<div id="divChatWindowsWrapper" ng-app="ChatApp" ng-controller="chatController">
 
     <div class="alert-success " id="userNick" ng-show="false">Welcome   <h4 id="userNick">  @ViewBag.Username !!</h4> </div>
     @* Master = List of connected users *@
@@ -51,7 +74,7 @@
             <div class="container">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <span class="fa fa-users"></span>&nbsp; &nbsp; Online[{{OnlineUsers.length}}]
+                        <span class="fa fa-users numberUsersOnlineStyle">&nbsp; &nbsp; Online[{{OnlineUsers.length}}]</span>
                         <div class="btn-group pull-right">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <span class="glyphicon glyphicon-chevron-down"></span>
@@ -85,9 +108,9 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="panel-body" style="min-height: 100px; max-height: 600px;" ng-class="">
-                        <div id="{{user.name}}" class="cssOneUserRecord" ng-repeat='user in OnlineUsers track by $index'>
-                                <div class="media-body">
+                    <div class="panel-body" ng-class="">
+                        <div id="{{user.name}}" class="cssOneUserRecord" ng-repeat='user in OnlineUsers track by $index' >
+                                <div class="media-body" >
                                     <h3 class="media-heading">
                                         <strong>
                                             <a href="#" ng-click="PrivateMessage($index)">
@@ -95,7 +118,7 @@
                                                 <i class="fa fa-circle" style="color: green" ng-show="user.status=='Online'"> </i>
                                                 <i class="fa fa-history" style="color: orange" ng-show="user.status=='Away'"> </i>
                                                 {{user.name}}
-                                                <i class="fa fa-flag" style="color:red" ng-show="user.name == ReceivedMessageFrom"></i>
+                                                <i class="fa fa-flag" style="color:red" ng-show="PendingMessageFromUser($index)"></i>
                                             </a>
                                         </strong>
                                     </h3>
@@ -108,24 +131,23 @@
         </div>
     </div>
     @* Detail = Chat screens. *@
-    <div id="divChatScreensSection">
-        <div cñass="Conversation">
+    <div id="divChatScreensSection" ng-show="ShowPrivateWindow">
             <div class="container">
                     <div>
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <span class="glyphicon glyphicon-comment"></span> {{UserInPrivateChat.name}}
                                 <div class="btn-group pull-right">
-                                    <button type="button" class="btn btn-default btn-xs" ng-click="ClosePrivateWindow()">
+                                    <button type="button" class="btn btn-default btn-xs" ng-click="ClosePrivateWindow()" ng-class="{'active': showPrivateWindow == false}">
                                         <span class="glyphicon glyphicon-remove"> </span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="panel-body" style="overflow-y: scroll; min-height: 200px; max-height: 200px;">
+                            <div class="divOngoingConversationSection">
                                 <ul class="chat">
                                     <li ng-class="(msg.from == UserInPrivateChat.name )? 'left' : 'right'" class="clearfix" ng-repeat="msg in PrivateMessages | filter:({to: UserInPrivateChat.ConnectionId})">
                                         <span class="chat-img" ng-class="(msg.from == UserInPrivateChat.name )? 'pull-left' : 'pull-right'">
-                                            <img ng-src="{{(msg.from == UserInPrivateChat.name )? 'http://placehold.it/40/FA6F57/fff&text=OT' : 'http://placehold.it/40/55C1E7/fff&text=ME' }} " alt="User Avatar"/>
+                                            <img ng-src="{{(msg.from == UserInPrivateChat.name )? 'http://placehold.it/40/FA6F57/fff&text=OT' : 'http://placehold.it/40/55C1E7/fff&text=ME' }} " alt="User Avatar" />
                                         </span>
                                         <div class="chat-body clearfix">
                                             <div class="header">
@@ -139,17 +161,39 @@
                                                 {{msg.message}}
                                             </p>
                                         </div>
-                                        <hr/>
+                                        <hr />
                                     </li>
                                 </ul>
                             </div>
+                            @*<div class="panel-body" style="overflow-y: scroll; min-height: 200px; max-height: 80%;">
+            <ul class="chat">
+                <li ng-class="(msg.from == UserInPrivateChat.name )? 'left' : 'right'" class="clearfix" ng-repeat="msg in PrivateMessages | filter:({to: UserInPrivateChat.ConnectionId})">
+                    <span class="chat-img" ng-class="(msg.from == UserInPrivateChat.name )? 'pull-left' : 'pull-right'">
+                        <img ng-src="{{(msg.from == UserInPrivateChat.name )? 'http://placehold.it/40/FA6F57/fff&text=OT' : 'http://placehold.it/40/55C1E7/fff&text=ME' }} " alt="User Avatar"/>
+                    </span>
+                    <div class="chat-body clearfix">
+                        <div class="header">
+                            <strong class="primary-font">{{msg.from}}</strong>
+                            <small ng-class="(msg.from == UserInPrivateChat.name )? 'pull-left' : 'pull-right'"
+                                   class="text-muted">
+
+                            </small>
+                        </div>
+                        <p>
+                            {{msg.message}}
+                        </p>
+                    </div>
+                    <hr/>
+                </li>
+            </ul>
+        </div>*@
                             <div class="panel-footer">
 
                                 <div>
                                     {{usertyping}}
                                 </div>
                                 <div class="input-group">
-                                    <input id="btn-input" type="text" class="form-control input-sm" ng-model="pvtmessage" placeholder="Type your message here..." ng-keypress="SkeyPress($event)"/>
+                                    <input id="btn-input" type="text" class="form-control input-sm" ng-model="pvtmessage" placeholder="Type your message here..." ng-keypress="SkeyPress($event)" />
                                     <span class="input-group-btn">
                                         <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="SendPrivateMessage();">
                                             Send
@@ -162,7 +206,6 @@
                 <div flash-message="7000" style="z-index: 400; position: absolute; bottom: 0px; left: 1px;"></div>
 
             </div>
-        </div>
     </div>
 </div>
 
