@@ -3,14 +3,15 @@
     app.controller("chatController", function ($scope, $rootScope, signalR,Flash) {
     $scope.$parent.UserName = "";
     $scope.rooms = [];// RoomFactory.Rooms;
-    $scope.$parent.UserName = $("h4#userNick").text();;  // prompt("Enter unique name :");
+    $scope.$parent.UserName = $("h4#userNick").text();  // prompt("Enter unique name :");
     signalR.startHub();  
     $scope.activeRoom = '';
     $scope.chatHistory = [];
-    $scope.Users = []
+        $scope.Users = [];
     $scope.RoomsLoggedId = [];
     $scope.ShowNewMessageFlag = false;
-    $scope.typemsgdisable = true;  
+    $scope.typemsgdisable = true;
+        $scope.ReceivedMessageFrom = '';
     signalR.UserEntered(function (room, user,cid) {
          if ($scope.activeRoom == room&&user!='') {          
             var result = $.grep($scope.users, function (e) { return e.name == user; })
@@ -62,8 +63,9 @@
   
         $scope.SendPrivateMessage = function ()
         {            
-           // debugger;
+            debugger;
             signalR.SendPrivateMessage($scope.UserInPrivateChat.ConnectionId, $scope.pvtmessage);
+            signalR.NotifyNewMessageReceived($scope.UserInPrivateChat.ConnectionId);
             $scope.pvtmessage = '';
         }
         $scope.OnlineUsers = [];
@@ -98,6 +100,7 @@
             if (e.which == 13)
             {
                 $scope.SendPrivateMessage();
+                $scope.NotifyNewMessageReceived();
                 $scope.usertyping = ''
             }
             else if (e.which == 46 || e.which == 8) {
@@ -113,9 +116,9 @@
                 }, 500);
             }
         }
-       // PrivateMessage($index)
         $scope.PrivateMessage = function (index) {
-            debugger;
+            //debugger;
+            $scope.ReceiveMessageFrom = '';
             var user = $scope.OnlineUsers[index];
             $scope.ShowPrivateWindow = true;
             $scope.UserInPrivateChat = user;
@@ -169,12 +172,14 @@
            // $scope.AddMessageToRoom(msgBdy);
         });
 
-        $scope.NotifyNewMessageReceived(function() {
-            signalR.NotifyNewMessageReceived(toUserId);
-        });
-
+        //$scope.NotifyNewMessageReceived = function() {
+        //    signalR.NotifyNewMessageReceived($scope.UserInPrivateChat.ConnectionId);
+        //};
+        
         signalR.ReceivingNewMessageNotification(function(fromuserid, fromUserName) {
-
+            //En la lista de usuarios conectados hemos de habilitar que se muestre el flag de nuevo mensaje para el usuario que nos ha enviado el mensaje.
+            $scope.ReceivedMessageFrom = fromUserName;
+            $scope.$evalAsync();
         });
     });
 

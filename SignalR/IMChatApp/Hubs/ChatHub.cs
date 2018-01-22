@@ -64,7 +64,7 @@ namespace IMChatApp.Hubs
             var fromUser = loggedInUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
             if (toUser != null && fromUser != null)
             {
-                Clients.Client(toUserId).ReceiveNewMessageNotification(fromUserId, fromUser.name);
+                Clients.Client(toUserId).ReceivingNewMessageNotification(fromUserId, fromUser.name);
             }
         }
         public void UserTyping(string connectionId, string msg)

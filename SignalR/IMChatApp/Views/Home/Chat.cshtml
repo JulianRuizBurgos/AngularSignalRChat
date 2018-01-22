@@ -95,7 +95,7 @@
                                                 <i class="fa fa-circle" style="color: green" ng-show="user.status=='Online'"> </i>
                                                 <i class="fa fa-history" style="color: orange" ng-show="user.status=='Away'"> </i>
                                                 {{user.name}}
-                                                <i class="fa fa-flag" style="color:red" ng-show="true"></i>
+                                                <i class="fa fa-flag" style="color:red" ng-show="user.name == ReceivedMessageFrom"></i>
                                             </a>
                                         </strong>
                                     </h3>
@@ -151,7 +151,7 @@
                                 <div class="input-group">
                                     <input id="btn-input" type="text" class="form-control input-sm" ng-model="pvtmessage" placeholder="Type your message here..." ng-keypress="SkeyPress($event)"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="SendPrivateMessage()">
+                                        <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="SendPrivateMessage();">
                                             Send
                                         </button>
                                     </span>

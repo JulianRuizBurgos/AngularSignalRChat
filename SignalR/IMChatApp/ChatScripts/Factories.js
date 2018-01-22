@@ -61,7 +61,7 @@
             $hub.client.isTyping = callback;
         },
         ReceivingNewMessageNotification: function(callback) {
-            $hub.client.receiveNewMessageNotification = callback;
+            $hub.client.receivingNewMessageNotification = callback;
         }
         
     }
