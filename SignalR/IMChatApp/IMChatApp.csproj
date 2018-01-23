@@ -174,7 +174,6 @@
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="ChatScripts\angular.min.js" />
-    <Content Include="ChatScripts\App.js" />
     <Content Include="ChatScripts\Controlers.js" />
     <Content Include="ChatScripts\Controlers - backup.js" />
     <Content Include="ChatScripts\Factories.js" />

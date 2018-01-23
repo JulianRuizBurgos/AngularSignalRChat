@@ -175,14 +175,6 @@
                     $scope.UserInPrivateChat = { name: fromname, ConnectionId: toname }
                 }
             }
-            /// To Scroll the message window.
-            if ($("#PrivateChatArea div.panel-body").length == 1) {
-            var    $container = $("#PrivateChatArea div.panel-body");
-                $container[0].scrollTop = $container[0].scrollHeight;
-                $container.animate({ scrollTop: $container[0].scrollHeight }, "fast");
-            }
-            $scope.$evalAsync();
-           // $scope.AddMessageToRoom(msgBdy);
         });
 
         signalR.ReceivingNewMessageNotification(function(fromuserid, fromUserName) {
