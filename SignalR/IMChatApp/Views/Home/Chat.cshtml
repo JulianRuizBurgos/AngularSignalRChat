@@ -2,23 +2,159 @@
 @{
     ViewBag.Title = "Chat";
 }
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 <style>
-    .divChatWindowsWrapper {
-        position: absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        border: 1px solid Black;
-        padding: 5px;
-        display: flex;
-        flex-direction: row;
-        overflow: hidden;
-
+    * {
+        box-sizing: border-box;
     }
 
+    @@media all and (max-width: 1024px) {
+        .moduleWrapper {
+            /*position: absolute;*/
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            max-height: 100%;
+            border: 1px solid Black;
+            padding: 5px;
+            display: flex;
+            flex-direction: row;
+            /*overflow: hidden;*/
+            font-size: 15px;
+        }
+
+        OnlineUsers {
+            margin: 5px;
+            max-width: 300px;
+            min-width: 200px;
+            min-width: 20%;
+            min-height: 100%;
+            background-color: white;
+            display: flex;
+            /*overflow: hidden;*/
+            flex-flow: column;
+        }
+
+
+        OnlineUsersHeader {
+            border-style: dashed;
+            border-width: 5px;
+            border-color: cornflowerblue;
+            background-color: aliceblue;
+            min-height: 20%;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            /*overflow: auto;*/
+            align-items: flex-start;
+            align-content: center;
+        }
+
+        NumberUsersOnline {
+            padding: 0 8px;
+            color: black;
+            white-space: nowrap;
+            overflow: auto;
+            display: flex;
+        }
+
+        /*.userStatusUpdateButton {
+            padding: 0 8px;
+            overflow: auto;
+            display: flex;
+            flex: 1 0 auto;
+            flex-direction: column;
+        }*/
+
+        OnlineUsersBody {
+            background-color: aliceblue;
+        }
+
+        UserRecord {
+            white-space: nowrap;
+            display: flex;
+            overflow: auto;
+            flex-direction: column;
+        }
+    }
+    @@media all and (min-width: 1024px) {
+         .moduleWrapper {
+             /*position: absolute;*/
+             top: 0%;
+             left: 0%;
+             width: 100%;
+             height: 100%;
+             max-height: 100%;
+             border: 1px solid Black;
+             padding: 5px;
+             display: flex;
+             flex-direction: row;
+             /*overflow: hidden;*/
+
+         }
+
+         OnlineUsers {
+             background-color: aliceblue;
+             margin: 5px;
+             max-width: 300px;
+             min-width: 200px;
+             min-width: 20%;
+             min-height: 100%;
+             background-color: white;
+             display: flex;
+             /*overflow: hidden;*/
+             flex-flow: column;
+             font-size: 2vw;
+         }
+    
+
+         OnlineUsersHeader {
+             border-style: dashed;
+             border-width: 5px;
+             border-color: cornflowerblue;
+             background-color: aliceblue;
+             min-height: 20%;
+             border-radius: 4px;
+             display: flex;
+             flex-direction: row;
+             flex-wrap: nowrap;
+             /*overflow: auto;*/
+             align-items: flex-start;
+             align-content: center;
+         }
+
+         NumberUsersOnline {
+             padding: 0 8px;
+             color: black;
+             white-space: nowrap;
+             overflow: auto;
+             display: flex;
+         }
+         /*.userStatusUpdateButton {
+             padding: 0 8px;
+             overflow: auto;
+             display: flex;
+             flex: 1 0 auto;
+             flex-direction: column;
+         }*/
+
+        OnlineUsersBody {
+            background-color: aliceblue;
+        }
+
+        UserRecord {
+            color: black;
+            white-space: nowrap;
+            display: flex;
+            overflow: auto;
+            flex-direction: column;
+        }
+    
+    }
+         /*
     .divConnectedUsersSection {
         margin: 5px;
         max-width: 300px;
@@ -32,10 +168,6 @@
     }
 
     .cssOneUserRecord {
-        /*height: 47px;
-        width: 98%;
-        position: relative; 
-        border-bottom: 1px solid white;*/
         max-width: inherit;
         min-width: inherit;
         white-space: nowrap;
@@ -70,22 +202,20 @@
         overflow: auto;
         min-height: 0px;
     }
+    */
 
-   
 
+         
 </style>
 
-<h2>Chat</h2>
-<div class="divChatWindowsWrapper" ng-app="ChatApp" ng-controller="chatController">
+    <h2>Chat</h2>
 
-    <div class="alert-success " id="userNick" ng-show="false">Welcome   <h4 id="userNick">  @ViewBag.Username !!</h4> </div>
-    @* Master = List of connected users *@
-    <div class="divConnectedUsersSection">
-        <div id="OnlineUsers">
-            <div class="container">
-                <div class="panel panel-primary">
+    <div class="moduleWrapper" ng-app="ChatApp" ng-controller="chatController">
+        <OnlineUsers>
+            <div class="panel panel-primary">
+                <OnlineUsersHeader>  
                     <div class="panel-heading">
-                        <span class="fa fa-users numberUsersOnlineStyle">&nbsp; &nbsp; Online[{{OnlineUsers.length}}]</span>
+                        <NumberUsersOnline class="fa fa-users">&nbsp; Online[{{OnlineUsers.length}}]</NumberUsersOnline>
                         <div class="btn-group pull-right">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 <span class="glyphicon glyphicon-chevron-down"></span>
@@ -119,10 +249,12 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="panel-body" ng-class="">
-                        <div id="{{user.name}}" class="cssOneUserRecord" ng-repeat='user in OnlineUsers track by $index'>
+                </OnlineUsersHeader>
+                <OnlineUsersBody>
+                    <div class="panel-body">
+                        <UserRecord id="{{user.name}}" ng-repeat='user in OnlineUsers track by $index'>
                             <div class="media-body">
-                                <h3 class="media-heading">
+                                <div class="media-heading">
                                     <strong>
                                         <a href="#" ng-click="PrivateMessage($index)">
                                             <i class="fa fa-minus-circle" style="color: red" ng-show="user.status=='Busy'"></i>
@@ -132,92 +264,43 @@
                                             <i class="fa fa-flag" style="color:red" ng-show="PendingMessageFromUser($index)"></i>
                                         </a>
                                     </strong>
-                                </h3>
+                                </div>
                             </div>
-
-                        </div>
+                        </UserRecord>
                     </div>
-                </div>
+                </OnlineUsersBody>
             </div>
-        </div>
+        </OnlineUsers>
     </div>
-    @* Detail = Chat screens. *@
-    <div class="divChatScreensSection" ng-show="ShowPrivateWindow">
-        <div class="panel-heading">
-            <span class="glyphicon glyphicon-comment"></span> {{UserInPrivateChat.name}}
-            <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default btn-xs" ng-click="ClosePrivateWindow()" ng-class="{'active': showPrivateWindow == false}">
-                    <span class="glyphicon glyphicon-remove"> </span>
-                </button>
-            </div>
-        </div>
-        <div class="divOngoingChatContainer" scroll-bottom="PrivateMessages">
-            <div ng-class="(msg.from == UserInPrivateChat.name )? 'left' : 'right'" class="clearfix" ng-repeat="msg in PrivateMessages | filter:({to: UserInPrivateChat.ConnectionId})">
-                <div class="chatMessage">
-                    <span class="chat-img" ng-class="(msg.from == UserInPrivateChat.name )? 'pull-left' : 'pull-right'">
-                        <img ng-src="{{(msg.from == UserInPrivateChat.name )? 'http://placehold.it/40/FA6F57/fff&text=OT' : 'http://placehold.it/40/55C1E7/fff&text=ME' }} " alt="User Avatar" />
-                    </span>
-                    <div class="chat-body ">
-                        <div class="header">
-                            <strong class="primary-font">{{msg.from}}</strong>
-                            <small ng-class="(msg.from == UserInPrivateChat.name )? 'pull-left' : 'pull-right'"
-                                   class="text-muted">
 
-                            </small>
-                        </div>
-                        <p>
-                            {{msg.message}}
-                        </p>
-                    </div>
-                </div>
-                <hr />
-            </div>
-        </div>
-        <div class="panel-footer">
+   
 
-            <div>
-                {{usertyping}}
-            </div>
-            <div class="input-group">
-                <input id="btn-input" type="text" class="form-control input-sm" ng-model="pvtmessage" placeholder="Type your message here..." ng-keypress="SkeyPress($event)" />
-                <span class="input-group-btn">
-                    <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="SendPrivateMessage();">
-                        Send
-                    </button>
-                </span>
-            </div>
-        </div>
-        <div flash-message="7000" style="z-index: 400; position: absolute; bottom: 0px; left: 1px;"></div>
-    </div>
-</div>
-
-@section Scripts
-{
-    <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script src="~/ChatScripts/angular.min.js"></script>
-    <script src="~/Scripts/angular-flash.js"></script>
-    <script type="text/javascript">
-        var app = angular.module("ChatApp", ["flash"])
-            .directive('scrollBottom', ['$timeout', function ($timeout) {
-                return {
-                    scope: {
-                        scrollBottom: "="
-                    },
-                    link: function (scope, element) {
-                        scope.$watchCollection('scrollBottom', function (newValue) {
-                            if (newValue)
-                            {
-                                $(element).scrollTop($(element)[0].scrollHeight);
-                            }
-                        });
+    @section Scripts
+    {
+        <script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script src="~/ChatScripts/angular.min.js"></script>
+        <script src="~/Scripts/angular-flash.js"></script>
+        <script type="text/javascript">
+            var app = angular.module("ChatApp", ["flash"])
+                .directive('scrollBottom', ['$timeout', function ($timeout) {
+                    return {
+                        scope: {
+                            scrollBottom: "="
+                        },
+                        link: function (scope, element) {
+                            scope.$watchCollection('scrollBottom', function (newValue) {
+                                if (newValue) {
+                                    $(element).scrollTop($(element)[0].scrollHeight);
+                                }
+                            });
+                        }
                     }
-                }
-            }]);
-    </script>
+                }]);
+        </script>
 
-    <script src="~/ChatScripts/Controlers.js"></script>
-    <script src="~/ChatScripts/Factories.js"></script>
+        <script src="~/ChatScripts/Controlers.js"></script>
+        <script src="~/ChatScripts/Factories.js"></script>
 
 
-}
+    }

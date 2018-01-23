@@ -46,13 +46,6 @@ namespace IMChatApp.Models
         public string status { get; set; }
         public string memberType { get; set; }
         public string avator { get; set; }
-
-        //public user Login(string UserName)
-        //{ 
-
-
-        //}
-
     }
     public class UsersRestricted
     {
